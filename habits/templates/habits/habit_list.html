@@ -1,0 +1,36 @@
+<h1>All habits</h1>
+
+<p>
+    <a href="{% url 'today' %}">Today</a>
+    <a href="{% url 'create_habit' %}">Create a habit</a>
+</p>
+
+<ul>
+{% for habit in habits %}
+    <li>
+        <strong>{{ habit.title }}</strong>
+
+        {% if habit.interval_days == 1 %}
+            every day
+        {% else %}
+            every {{ habit.interval_days }} days
+        {% endif %}
+
+        <br>
+        since {{ habit.start_date|date:"j F Y" }}
+        <form method="post" action="{% url 'archive_habit' habit.id %}">
+            {% csrf_token %}
+            <button type="submit">
+                {% if habit.is_active %}Archive{% else %}Restore{% endif %}
+            </button>
+        </form>
+
+        <a href="{% url 'delete_habit' habit.id %}">Delete</a>
+        {% if not habit.is_active %}
+            <em>(inactive)</em>
+        {% endif %}
+    </li>
+{% empty %}
+    <li>No habits yet.</li>
+{% endfor %}
+</ul>

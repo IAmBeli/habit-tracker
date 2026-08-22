@@ -1,0 +1,32 @@
+<h1>{{ date }}</h1>
+
+<ul>
+{% for item in items %}
+    <li>
+        {{ item.habit.title }}
+        {% if item.is_done %}✓{% else %}-{% endif %}
+        
+        {% if item.streak > 0 %}
+            <span>streak: {{ item.streak }}</span>
+        {% endif %}
+
+        <form method="post" action="{% url 'toggle' item.habit.id %}">
+            {% csrf_token %}
+            <button type="submit">
+                {% if item.is_done %}Undo{% else %}Done{% endif %}
+            </button>
+        </form>
+    </li>
+{% empty %}
+    <li>Nothing due today</li>
+{% endfor %}
+</ul>
+
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Log out</button>
+</form>
+
+<a href="{% url 'create_habit' %}">Add habit</a>
+<br>
+<a href="{% url 'habit_list' %}">Show list of all habits</a>

@@ -1,0 +1,14 @@
+<h1>Delete habit?</h1>
+
+<p>
+    You are about to delete <strong>{{ habit.title }}</strong>
+    and all {{ habit.completions.count }} completion records.
+    This cannot be undone.
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+</form>
+
+<a href="{% url 'habit_list' %}">Cancel</a>
