@@ -1,0 +1,19 @@
+<h1>Pauses</h1>
+
+<p>
+    <a href="{% url 'today' %}">Today</a>
+    <a href="{% url 'create_pause' %}">Add pause</a>
+</p>
+
+<ul>
+{% for pause in pauses %}
+    <li>
+        {{ pause.start_date|date:"j F Y" }} - {{ pause.end_date|date:"j F Y"}}
+        <br>
+        {{ pause.reason }}
+        <a href="{% url 'delete_pause' pause.id %}">Delete</a>
+    </li>
+{% empty %}
+    <li>No pauses.</li>
+{% endfor %}
+</ul>

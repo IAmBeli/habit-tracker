@@ -1,0 +1,15 @@
+<h1>Delete pause?</h1>
+
+<p>
+    {{ pause.start_date|date:"j F Y" }} - {{ pause.end_date|date:"j F Y" }}
+    {{ pause.reason }}
+</p>
+
+<p>Streaks will be recalculated without this pause.</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+</form>
+
+<a href="{% url 'pause_list' %}">Cancel</a>

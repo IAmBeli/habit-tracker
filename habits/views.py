@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Completion, Habit, Pause
 from .services import is_due, current_streak, paused_days
-from .forms import HabitForm
+from .forms import HabitForm, PauseForm
 
 @login_required
 def today(request):
@@ -92,3 +92,31 @@ def delete_habit(request, habit_id):
         return redirect("habit_list")
 
     return render(request, "habits/habit_confirm_delete.html", {"habit": habit})
+
+@login_required
+def pause_list(request):
+    pauses = Pause.objects.filter(user=request.user).order_by("-start_date")
+    return render(request, "habits/pause_list.html", {"pauses": pauses})
+
+@login_required
+def create_pause(request):
+    if request.method == "POST":
+        form = PauseForm(request.POST)
+        if form.is_valid():
+            pause = form.save(commit=False)
+            pause.user = request.user
+            pause.save()
+            return redirect("pause_list")
+    else:
+        form = PauseForm()
+
+    return render(request, "habits/pause_form.html", {"form": form})
+
+@login_required
+def delete_pause(request, pause_id):
+    pause = get_object_or_404(Pause, pk=pause_id, user=request.user)
+
+    if request.method == "POST":
+        pause.delete()
+        return redirect("pause_list")
+    return render(request, "habits/pause_confirm_delete.html", {"pause": pause})
