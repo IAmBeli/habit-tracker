@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Completion, Habit, Pause
-from .services import is_due, current_streak, paused_days
+from .services import is_due, current_streak, paused_days, month_summary
 from .forms import HabitForm, PauseForm
 
 @login_required
@@ -120,3 +120,26 @@ def delete_pause(request, pause_id):
         pause.delete()
         return redirect("pause_list")
     return render(request, "habits/pause_confirm_delete.html", {"pause": pause})
+
+@login_required
+def calendar_view(request, year=None, month=None):
+    today_date = timezone.localdate()
+    year = year or today_date.year
+    month = month or today_date.month
+
+    habits = Habit.objects.filter(user=request.user)
+
+    completions = Completion.objects.filter(habit__user=request.user)
+    done_by_habits = {}
+    for habit_id, day in completions.values_list("habit_id", "date"):
+        done_by_habits.setdefault(habit_id, set()).add(day)
+
+    pauses = paused_days(Pause.objects.filter(user=request.user))
+
+    days = month_summary(year, month, habits, done_by_habits, pauses)
+
+    return render(request, "habits/calendar.html", {
+        "days": days,
+        "year": year,
+        "month": month,
+    })

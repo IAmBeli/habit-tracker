@@ -1,0 +1,15 @@
+{% extends "habits/base.html" %}
+
+{% block title %}Calendar{% endblock %}
+
+{% block content %}
+<h1>{{ year }} - {{ month }}</h1>
+
+<div class="calendar">
+{% for day in days %}
+    <div class="day {{ day.state }}">
+        {{ day.date|date:"j" }}
+    </div>
+{% endfor %}
+</div>
+{% endblock %}

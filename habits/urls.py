@@ -11,4 +11,6 @@ urlpatterns = [
     path("pauses/", views.pause_list, name="pause_list"),
     path("pauses/new/", views.create_pause, name="create_pause"),
     path("pauses/<int:pause_id>/delete/", views.delete_pause, name="delete_pause"),
+    path("calendar/", views.calendar_view, name="calendar"),
+    path("calendar/<int:year>/<int:month>/", views.calendar_view, name="calendar_month"),
 ]

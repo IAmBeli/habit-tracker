@@ -1,0 +1,22 @@
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    max-width: 400px;
+}
+
+.day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.day.empty {color: #bbb; }
+.day.full {background: #7fc7a0; }
+.day.partial {background: #ffd699; }
+.day.none {background: #f5b5b5; }
+.day.paused {background: #d8d8f0; }

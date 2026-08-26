@@ -1,3 +1,8 @@
+{% extends "habits/base.html" %}
+
+{% block title %}Add a habit{% endblock %}
+
+{% block content %}
 <h1>New habit</h1>
 
 <form method="post">
@@ -7,3 +12,4 @@
 </form>
 
 <a href="{% url 'today' %}">Back</a>
+{% endblock %}

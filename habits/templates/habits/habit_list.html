@@ -1,7 +1,11 @@
+{% extends "habits/base.html" %}
+
+{% block title %}List of habits{% endblock %}
+
+{% block content %}
 <h1>All habits</h1>
 
 <p>
-    <a href="{% url 'today' %}">Today</a>
     <a href="{% url 'create_habit' %}">Create a habit</a>
 </p>
 
@@ -34,3 +38,4 @@
     <li>No habits yet.</li>
 {% endfor %}
 </ul>
+{% endblock %}

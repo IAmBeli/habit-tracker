@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Habit tracker{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'habits/style.css' %}">
+</head>
+<body>
+    <nav>
+        <a href="{% url 'today' %}">Today</a>
+        <a href="{% url 'habit_list' %}">Habits</a>
+        <a href="{% url 'calendar' %}">Calendar</a>
+        <a href="{% url 'pause_list' %}">Pauses</a>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Log out</button>
+    </form>
+</body>
+</html>

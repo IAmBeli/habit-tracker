@@ -1,3 +1,8 @@
+{% extends "habits/base.html" %}
+
+{% block title %}Today{% endblock %}
+
+{% block content %}
 <h1>{{ date }}</h1>
 
 <ul>
@@ -21,14 +26,4 @@
     <li>Nothing due today</li>
 {% endfor %}
 </ul>
-
-<form method="post" action="{% url 'logout' %}">
-    {% csrf_token %}
-    <button type="submit">Log out</button>
-</form>
-
-<a href="{% url 'create_habit' %}">Add habit</a>
-<br>
-<a href="{% url 'habit_list' %}">Show list of all habits</a>
-<br>
-<a href="{% url 'pause_list' %}">Pauses</a>
+{% endblock %}

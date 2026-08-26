@@ -1,4 +1,5 @@
-from datetime import timedelta
+from datetime import timedelta, date
+from calendar import monthrange
 
 def is_due(start_date, interval_days, on_date):
     if on_date < start_date:
@@ -32,3 +33,34 @@ def paused_days(pauses):
             days.add(current)
             current += timedelta(days=1)
     return days
+
+def month_dates(year, month):
+    days_in_month = monthrange(year, month)[1]
+    return [date(year, month, day) for day in range(1, days_in_month + 1)]
+
+def month_summary(year, month, habits, done_by_habit, paused_dates):
+    result = []
+
+    for day in month_dates(year, month):
+        due = [
+            habit for habit in habits
+            if is_due(habit.start_date, habit.interval_days, day)
+        ]
+
+        if not due:
+            state = "empty"
+        elif day in paused_dates:
+            state = "paused"
+        else:
+            done_count = sum(
+                1 for habit in due
+                if day in done_by_habit.get(habit.id, set())
+            )
+            if done_count == len(due):
+                state = "full"
+            elif done_count > 0:
+                state = "partial"
+            else:
+                state = "none"
+        result.append({"date": day, "state": state})
+    return result
