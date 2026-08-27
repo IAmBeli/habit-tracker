@@ -5,25 +5,22 @@
 {% block content %}
 <h1>{{ date }}</h1>
 
-<ul>
+<div class="cards">
 {% for item in items %}
-    <li>
-        {{ item.habit.title }}
-        {% if item.is_done %}✓{% else %}-{% endif %}
-        
+    <div class="card">
+        <div class="card-title">{{ item.habit.title }}</div>
         {% if item.streak > 0 %}
-            <span>streak: {{ item.streak }}</span>
+            <div class="card-meta">streak: {{ item.streak }}</div>
         {% endif %}
-
         <form method="post" action="{% url 'toggle' item.habit.id %}">
             {% csrf_token %}
-            <button type="submit">
-                {% if item.is_done %}Undo{% else %}Done{% endif %}
+            <button type="submit" class="card-button {% if item.is_done %}done{% endif %}">
+                {% if item.is_done %}Done ✓{% else %}Mark done{% endif %}
             </button>
         </form>
-    </li>
+    </div>
 {% empty %}
-    <li>Nothing due today</li>
+    <p>Nothing due today</p>
 {% endfor %}
-</ul>
+</div>
 {% endblock %}

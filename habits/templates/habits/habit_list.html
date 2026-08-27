@@ -1,41 +1,41 @@
 {% extends "habits/base.html" %}
 
-{% block title %}List of habits{% endblock %}
+{% block title %}All habits{% endblock %}
 
 {% block content %}
-<h1>All habits</h1>
+<div class="page-head">
+    <h1>All habits</h1>
+    <a href="{% url 'create_habit' %}" class="button">Add habit</a>
+</div>
 
-<p>
-    <a href="{% url 'create_habit' %}">Create a habit</a>
-</p>
-
-<ul>
+<div class="rows">
 {% for habit in habits %}
-    <li>
-        <strong>{{ habit.title }}</strong>
+    <div class="row {% if not habit.is_active %}inactive{% endif %}">
+        <div class="main">
+            <div class="row-title">{{ habit.title }}</div>
+            <div class="row-meta">
+                {% if habit.interval_days == 1 %}
+                    every day
+                {% else %}
+                    every {{ habit.interval_days }} days
+                {% endif %}
+                · since {{ habit.start_date|date:"j F Y" }}
+                {% if not habit.is_active %}· inactive{% endif %}
+            </div>
+        </div>
 
-        {% if habit.interval_days == 1 %}
-            every day
-        {% else %}
-            every {{ habit.interval_days }} days
-        {% endif %}
-
-        <br>
-        since {{ habit.start_date|date:"j F Y" }}
-        <form method="post" action="{% url 'archive_habit' habit.id %}">
-            {% csrf_token %}
-            <button type="submit">
-                {% if habit.is_active %}Archive{% else %}Restore{% endif %}
-            </button>
-        </form>
-
-        <a href="{% url 'delete_habit' habit.id %}">Delete</a>
-        {% if not habit.is_active %}
-            <em>(inactive)</em>
-        {% endif %}
-    </li>
+        <div class="row-actions">
+            <form method="post" action="{% url 'archive_habit' habit.id %}">
+                {% csrf_token %}
+                <button type="submit" class="button">
+                    {% if habit.is_active %}Archive{% else %}Restore{% endif %}
+                </button>
+            </form>
+            <a href="{% url 'delete_habit' habit.id %}" class="button danger">Delete</a>
+        </div>
+    </div>
 {% empty %}
-    <li>No habits yet.</li>
+    <p>No habits yet.</p>
 {% endfor %}
-</ul>
+</div>
 {% endblock %}
