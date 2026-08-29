@@ -168,8 +168,8 @@ main {
 .day.empty { color:#bbb; }
 .day.full { background: #7fc7a0; }
 .day.partial { background: #ffd699; }
-.day.none { background: #f5b5b5; }
 .day.paused { background: #d8d8f0; }
+.day.none { background: #f5b5b5; }
 
 .day.blank {
     border: none;

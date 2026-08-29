@@ -29,7 +29,7 @@ def paused_days(pauses):
     days = set()
     for pause in pauses:
         current = pause.start_date
-        while current < pause.end_date:
+        while current <= pause.end_date:
             days.add(current)
             current += timedelta(days=1)
     return days
