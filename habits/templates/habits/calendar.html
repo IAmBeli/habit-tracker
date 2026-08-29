@@ -3,12 +3,24 @@
 {% block title %}Calendar{% endblock %}
 
 {% block content %}
-<h1>{{ year }} - {{ month }}</h1>
+<div class="page-head">
+    <a href="{% url 'calendar_month' prev_year prev_month %}" class="button">←</a>
+    <h1>{{ current_month|date:"F Y" }}</h1>
+    <a href="{% url 'calendar_month' next_year next_month %}" class="button">→</a>
+</div>
 
 <div class="calendar">
+    <div class="weekday">Mon</div>
+    <div class="weekday">Tue</div>
+    <div class="weekday">Wed</div>
+    <div class="weekday">Thu</div>
+    <div class="weekday">Fri</div>
+    <div class="weekday">Sat</div>
+    <div class="weekday">Sun</div>
+
 {% for day in days %}
     <div class="day {{ day.state }}">
-        {{ day.date|date:"j" }}
+        {% if day.date %}{{ day.date|date:"j" }}{% endif %}
     </div>
 {% endfor %}
 </div>

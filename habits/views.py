@@ -4,19 +4,16 @@ from django.utils import timezone
 from .models import Completion, Habit, Pause
 from .services import is_due, current_streak, paused_days, month_summary
 from .forms import HabitForm, PauseForm
+from .selectors import completion_by_habit, paused_dates_for
+from datetime import date
 
 @login_required
 def today(request):
     current_date = timezone.localdate()
 
     habits = Habit.objects.filter(user=request.user, is_active=True)
-
-    completions = Completion.objects.filter(habit__user=request.user)
-    done_by_habit={}
-    for habit_id, date in completions.values_list("habit_id", "date"):
-        done_by_habit.setdefault(habit_id, set()).add(date)
-
-    pauses = paused_days(Pause.objects.filter(user=request.user))
+    done_by_habit = completion_by_habit(request.user)
+    pauses = paused_dates_for(request.user)
 
     items=[]
     for habit in habits:
@@ -128,18 +125,19 @@ def calendar_view(request, year=None, month=None):
     month = month or today_date.month
 
     habits = Habit.objects.filter(user=request.user)
+    done_by_habit = completion_by_habit(request.user)
+    pauses = paused_dates_for(request.user)
 
-    completions = Completion.objects.filter(habit__user=request.user)
-    done_by_habits = {}
-    for habit_id, day in completions.values_list("habit_id", "date"):
-        done_by_habits.setdefault(habit_id, set()).add(day)
+    days = month_summary(year, month, habits, done_by_habit, pauses)
 
-    pauses = paused_days(Pause.objects.filter(user=request.user))
-
-    days = month_summary(year, month, habits, done_by_habits, pauses)
+    prev_year, prev_month = (year - 1, 12) if month == 1 else (year, month - 1)
+    next_year, next_month = (year + 1, 1) if month == 12 else (year, month + 1)
 
     return render(request, "habits/calendar.html", {
         "days": days,
-        "year": year,
-        "month": month,
+        "current_month": date(year, month, 1),
+        "prev_year": prev_year,
+        "prev_month": prev_month,
+        "next_year": next_year,
+        "next_month": next_month,
     })

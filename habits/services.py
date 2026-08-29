@@ -39,8 +39,9 @@ def month_dates(year, month):
     return [date(year, month, day) for day in range(1, days_in_month + 1)]
 
 def month_summary(year, month, habits, done_by_habit, paused_dates):
-    result = []
-
+    first_weekday = monthrange(year, month)[0]
+    result = [{"date": None, "state": "blank"} for _ in range(first_weekday)]
+    
     for day in month_dates(year, month):
         due = [
             habit for habit in habits
