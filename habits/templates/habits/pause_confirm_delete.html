@@ -5,17 +5,16 @@
 {% block content %}
 <h1>Delete pause?</h1>
 
-<p>
-    {{ pause.start_date|date:"j F Y" }} - {{ pause.end_date|date:"j F Y" }}
-    {{ pause.reason }}
+<p class="warning">
+    You are about to delete this pause.
+    This can't be undone.
 </p>
-
-<p>Streaks will be recalculated without this pause.</p>
 
 <form method="post">
     {% csrf_token %}
-    <button type="submit">Delete</button>
+    <div class="form-actions">
+        <button type="submit" class="button danger-solid">Delete</button>
+        <a href="{% url 'pause_list' %}">Cancel</a>
+    </div>
 </form>
-
-<a href="{% url 'pause_list' %}">Cancel</a>
 {% endblock %}

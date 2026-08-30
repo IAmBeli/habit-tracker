@@ -3,22 +3,26 @@
 {% block title %}Pauses{% endblock %}
 
 {% block content %}
-<h1>Pauses</h1>
-
-<p>
-    <a href="{% url 'create_pause' %}">Add pause</a>
-</p>
-
-<ul>
+<div class="page-head">
+    <h1>Pauses</h1>
+    <a href="{% url 'create_pause' %}" class="button">Add pause</a>
+</div>
+<div class="rows">
 {% for pause in pauses %}
-    <li>
-        {{ pause.start_date|date:"j F Y" }} - {{ pause.end_date|date:"j F Y"}}
-        <br>
-        {{ pause.reason }}
-        <a href="{% url 'delete_pause' pause.id %}">Delete</a>
-    </li>
+    <div class="row">
+        <div class="row-main">
+            <div class="row-title">
+                {{ pause.start_date|date:"j F Y" }} - {{ pause.end_date|date:"j F Y" }}
+            </div>
+            <div class="row-meta">{{ pause.reason }}</div>
+        </div>
+
+        <div class="row-actions">
+            <a href="{% url 'delete_pause' pause.id %}" class="button danger">Delete</a>
+        </div>
+    </div>
 {% empty %}
-    <li>No pauses.</li>
+    <p>No pauses.</p>
 {% endfor %}
-</ul>
+</div>
 {% endblock %}

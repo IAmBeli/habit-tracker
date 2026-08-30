@@ -1,15 +1,17 @@
 {% extends "habits/base.html" %}
 
-{% block title %}Add a pause{% endblock %}
+{% block title %}New pause{% endblock %}
 
 {% block content %}
 <h1>New pause</h1>
 
-<form method="post">
+<form method="post" class="form">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Create</button>
-</form>
 
-<a href="{% url 'pause_list' %}">Back</a>
+    <div class="form-actions">
+        <button type="submit" class="button primary">Create</button>
+        <a href="{% url 'pause_list' %}" class="button">Cancel</a>
+    </div>
+</form>
 {% endblock %}

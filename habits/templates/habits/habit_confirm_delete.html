@@ -5,7 +5,7 @@
 {% block content %}
 <h1>Delete habit?</h1>
 
-<p>
+<p class="warning">
     You are about to delete <strong>{{ habit.title }}</strong>
     and all {{ habit.completions.count }} completion records.
     This cannot be undone.
@@ -13,8 +13,9 @@
 
 <form method="post">
     {% csrf_token %}
-    <button type="submit">Delete</button>
+    <div class="form-actions">
+        <button type="submit" class="button danger-solid">Delete</button>
+        <a href="{% url 'habit_list' %}" class="button">Cancel</a>
+    </div>
 </form>
-
-<a href="{% url 'habit_list' %}">Cancel</a>
 {% endblock %}
