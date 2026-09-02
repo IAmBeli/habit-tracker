@@ -1,0 +1,43 @@
+{% extends "habits/base.html" %}
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+<h1>{{ user.username }}</h1>
+
+<div class="stats">
+    <div class="stat">
+        <div class="stat-value">{{ active_count }}</div>
+        <div class="stat-label">active habits</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value">{{ total_completions }}</div>
+        <div class="stat-label">completions</div>
+    </div>
+    <div class="stat">
+        <div class="stat">{{ best_streak }}</div>
+        <div class="stat-label">best streak</div>
+    </div>
+</div>
+
+<div class="rows">
+    <div class="row">
+        <div class="row-main">
+            <div class="row-title">Member since</div>
+        </div>
+        <div class="row-meta">{{ user.date_joined|date:"j F Y" }}</div>
+    </div>
+    <div class="row">
+        <div class="row-main">
+            <div class="row-title">Archived habits</div>
+        </div>
+        <div class="row-meta">{{ archived_count }}</div>
+    </div>
+    <div class="row">
+        <div class="row-main">
+            <div class="row-title">Pauses taken</div>
+        </div>
+        <div class="row-meta">{{ pause_count }}</div>
+    </div>
+</div>
+{% endblock %}

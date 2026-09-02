@@ -158,3 +158,31 @@ def register(request):
         form = UserCreationForm()
 
     return render(request, "registration/register.html", {"form": form})
+
+@login_required
+def account(request):
+    habits = Habit.objects.filter(user=request.user)
+    done_by_habit = completion_by_habit(request.user)
+    pauses = paused_dates_for(request.user)
+    current_date = timezone.localdate()
+
+    total_completions = sum(len(dates) for dates in done_by_habit.values())
+
+    best_streak = 0
+    for habit in habits.filter(is_active=True):
+        streak = current_streak(
+            habit.start_date,
+            habit.interval_days,
+            current_date,
+            done_by_habit.get(habit.id, set()),
+            pauses,
+        )
+        best_streak = max(best_streak, streak)
+
+    return render(request, "habits/account.html", {
+        "active_count": habits.filter(is_active=True).count(),
+        "archived_count": habits.filter(is_active=False).count(),
+        "total_completions": total_completions,
+        "best_streak": best_streak,
+        "pause_content": Pause.objects.filter(user=request.user).count(),
+    })

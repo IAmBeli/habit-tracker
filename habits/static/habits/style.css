@@ -255,3 +255,27 @@ h1 {
 .register-form .form-actions {
     justify-content: center;
 }
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.stat {
+    text-align: center;
+    padding: 18px 12px;
+    border: 1px solid #e5e5e5;
+}
+
+.stat-value {
+    font-size: 28px;
+    line-height: 1.1;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #888;
+    margin-top: 4px;
+}

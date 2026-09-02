@@ -14,4 +14,5 @@ urlpatterns = [
     path("calendar/", views.calendar_view, name="calendar"),
     path("calendar/<int:year>/<int:month>/", views.calendar_view, name="calendar_month"),
     path("register/", views.register, name="register"),
+    path("account/", views.account, name="account"),
 ]
