@@ -238,3 +238,20 @@ main {
 h1 {
     text-align: center;
 }
+
+.auth-form {
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.form-note {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+}
+
+.auth-form .form-actions,
+.register-form .form-actions {
+    justify-content: center;
+}

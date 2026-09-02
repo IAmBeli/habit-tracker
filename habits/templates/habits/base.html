@@ -9,17 +9,24 @@
 </head>
 <body>
     <header class="site-header">
-        <nav>
-            <a href="{% url 'today' %}">Today</a>
-            <a href="{% url 'habit_list' %}">Habits</a>
-            <a href="{% url 'calendar' %}">Calendar</a>
-            <a href="{% url 'pause_list' %}">Pauses</a>
-        </nav>
+        {% if user.is_authenticated %}
+            <nav>
+                <a href="{% url 'today' %}">Today</a>
+                <a href="{% url 'habit_list' %}">Habits</a>
+                <a href="{% url 'calendar' %}">Calendar</a>
+                <a href="{% url 'pause_list' %}">Pauses</a>
+            </nav>
 
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="link-button">Log out</button>
-        </form>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="link-button">Log out</button>
+            </form>
+        {% else %}
+            <nav>
+                <a href="{% url 'login' %}">Log in</a>
+                <a href="{% url 'register' %}">Register</a>
+            </nav>
+        {% endif %}
     </header>
 
     <main>

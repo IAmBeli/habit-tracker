@@ -1,0 +1,20 @@
+{% extends "habits/base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<h1>Register</h1>
+
+<form method="post" class="form register-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <div class="form-actions">
+        <button type="submit" class="button primary">Create account</button>
+    </div>
+</form>
+
+<p class="form-note">
+    Already have an account? <a href="{% url 'login' %}">Log in</a>
+</p>
+{% endblock %}

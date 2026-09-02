@@ -6,6 +6,8 @@ from .services import is_due, current_streak, paused_days, month_summary
 from .forms import HabitForm, PauseForm
 from .selectors import completion_by_habit, paused_dates_for
 from datetime import date
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 
 @login_required
 def today(request):
@@ -141,3 +143,18 @@ def calendar_view(request, year=None, month=None):
         "next_year": next_year,
         "next_month": next_month,
     })
+
+def register(request):
+    if request.user.is_authenticated:
+        return redirect("today")
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("today")
+    else:
+        form = UserCreationForm()
+
+    return render(request, "registration/register.html", {"form": form})
