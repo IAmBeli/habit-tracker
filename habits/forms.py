@@ -1,5 +1,5 @@
 from django import forms
-from .models import Habit, Pause
+from .models import Habit, Pause, Profile
 
 class HabitForm(forms.ModelForm):
     class Meta:
@@ -26,3 +26,8 @@ class PauseForm(forms.ModelForm):
             raise forms.ValidationError("End date cannot be before start date")
 
         return cleaned
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ["timezone"]

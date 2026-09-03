@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import Completion, Habit, Pause
+from .models import Completion, Habit, Pause, Profile
 from .services import is_due, current_streak, paused_days, month_summary
-from .forms import HabitForm, PauseForm
+from .forms import HabitForm, PauseForm, ProfileForm
 from .selectors import completion_by_habit, paused_dates_for
 from datetime import date
 from django.contrib.auth import login
@@ -161,6 +161,16 @@ def register(request):
 
 @login_required
 def account(request):
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect("account")
+    else:
+        form = ProfileForm(instance=profile)
+
     habits = Habit.objects.filter(user=request.user)
     done_by_habit = completion_by_habit(request.user)
     pauses = paused_dates_for(request.user)
@@ -180,6 +190,7 @@ def account(request):
         best_streak = max(best_streak, streak)
 
     return render(request, "habits/account.html", {
+        "form": form,
         "active_count": habits.filter(is_active=True).count(),
         "archived_count": habits.filter(is_active=False).count(),
         "total_completions": total_completions,
