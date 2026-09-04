@@ -12,8 +12,10 @@ class Habit(models.Model):
     title = models.CharField(max_length=200)
     start_date = models.DateField()
     interval_days = models.PositiveIntegerField(
+        "repeat every N days",
         default=1,
         validators=[MinValueValidator(1)],
+        help_text="1 = every day, 3 = every third day (1st, 4th, 7th)"
     )
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
