@@ -48,10 +48,10 @@ def month_summary(year, month, habits, done_by_habit, paused_dates):
             if is_due(habit.start_date, habit.interval_days, day)
         ]
 
-        if not due:
-            state = "empty"
-        elif day in paused_dates:
+        if day in paused_dates:
             state = "paused"
+        elif not due:
+            state = "empty"
         else:
             done_count = sum(
                 1 for habit in due

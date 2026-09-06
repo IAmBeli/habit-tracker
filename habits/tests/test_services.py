@@ -1,5 +1,12 @@
 from datetime import date
 from habits.services import is_due, paused_days, current_streak
+from habits.services import month_summary
+
+class FakeHabit:
+    def __init__(self, id, start_date, interval_days):
+        self.id = id
+        self.start_date = start_date
+        self.interval_days = interval_days
 
 class FakePause:
     def __init__(self, start_date, end_date):
@@ -60,3 +67,31 @@ def test_pause_does_not_increase_streak():
     done = {date(2026, 8, 10)}
     paused = {date(2026, 8, 7)}
     assert current_streak(START, 3, date(2026, 8, 10), done, paused) == 1
+
+def test_blank_cells_before_first_day():
+    days = month_summary(2026, 8, [], {}, set())
+    blanks = [d for d in days if d["state"] == "blank"]
+    assert len(blanks) == 5
+
+def test_month_has_all_days():
+    days = month_summary(2026, 8, [], {}, set())
+    real = [d for d in days if d["date"] is not None]
+    assert len(real) == 31
+
+def test_day_is_full_when_all_done():
+    habit = FakeHabit(1, date(2026, 8, 1), 1)
+    done = {1: {date(2026, 8, 3)}}
+    days = month_summary(2026, 8, [habit], done, set())
+    third = next(d for d in days if d["date"] == date(2026, 8, 3))
+    assert third["state"] == "full"
+
+def test_paused_day_shows_as_paused():
+    habit = FakeHabit(1, date(2026, 8, 1), 1)
+    days = month_summary(2026, 8, [habit], {}, {date(2026, 8, 3)})
+    third = next(d for d in days if d["date"] == date(2026, 8, 3))
+    assert third["state"] == "paused"
+
+def test_pause_visible_without_due_habits():
+    days = month_summary(2026, 8, [], {}, {date(2026, 8, 3)})
+    third = next(d for d in days if d["date"] == date(2026, 8, 3))
+    assert third["state"] == "paused"
